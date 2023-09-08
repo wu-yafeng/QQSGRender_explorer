@@ -8,6 +8,27 @@ public:
     // todo
 };
 
+enum SURFACE_FORMAT
+{
+   A1R5G5B5 = 0,
+   A4R4G4B4 = 1,
+   A8R8G8B8 = 2,
+   DXT1 = 3,
+   DXT3 = 4,
+   DXT5 = 5
+}
+
+struct TextureSurface
+{
+    int Width;
+    int Height;
+    int SrcPitch;
+    // The surface format
+    SURFACE_FORMAT Format;
+    // The Surface Mem
+    char SrcMem[256];
+};
+
 class IDisplay
 {
 public:
@@ -28,12 +49,20 @@ public:
     virtual int CreateAdditionalSwapChain(HWND hWnd) = 0;
     virtual int DeleteAdditionalSwapChain(ISwapChain *swapChain) = 0;
 
-    // un-analysis
-    virtual int TextureFunc1(int a1) = 0;
-    virtual int TextureFunc2(int a1) = 0;
-    virtual int TextureFunc3(int a1) = 0;
-    virtual int TextureFunc4(int width, int height, int formatType) = 0;
-    virtual int TextureFunc5(int a1, int a2, int a3, int a4) = 0;
+    // texture 引用计数器+1
+    virtual int IncrTextureRef(int index) = 0;
+    virtual int DecrTextureRef(int index) = 0;
+    // 创建纹理
+    virtual int CreateTextureFromMem(TextureSurface* parameter) = 0;
+    virtual int CreateTexture(int width, int height, SURFACE_FORMAT format) = 0;
+    virtual void ReleaseTextureSurface(int index, LONG left, LONG top,TextureSurface* parameter) = 0;
+
+    virtual int GetXX();
+    virtual int Todo(TextureSurface* surface1, TextureSurface* surface2);
+
+    virtual int GetTextureViewWidth(int index);
+    virtual int GetTextureViewHeight(int index);
+    virtual int GetTextureViewVolume(int index);
 
     // todo more than 200 functions
 };
